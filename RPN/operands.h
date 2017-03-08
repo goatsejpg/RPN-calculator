@@ -13,7 +13,7 @@ struct operatorArgPair {
 	~operatorArgPair() = default;
 };
 
-extern operatorArgPair* operatorArgPairs[26];
+extern operatorArgPair* operatorArgPairs[32];
 
 void start();
 void end();
@@ -52,5 +52,12 @@ bool NEG(std::vector<double>* stack);
 
 bool PI(std::vector<double>* stack);
 bool E(std::vector<double>* stack);
+bool RANDOM(std::vector<double>* stack);
+bool RANDOM_RANGE(std::vector<double>* stack);
+bool RANDOM_INT(std::vector<double>* stack);
+bool RANDOM_INT_RANGE(std::vector<double>* stack);
+
+bool LCM(std::vector<double>* stack);
+bool HCF(std::vector<double>* stack);
 
 #endif // OPERANDS_H

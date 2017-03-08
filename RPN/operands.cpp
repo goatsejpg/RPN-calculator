@@ -2,17 +2,19 @@
 #include <iostream>
 #include <cstdint>
 #include <string.h>
+#include <random>
+#include <cstdlib>
 #include "operands.h"
 #include "error.h"
 
-operatorArgPair* pairs[26];
+operatorArgPair* pairs[32];
 
 void start() {
 	pairs[0] = new operatorArgPair(&ADD, "+");
 	pairs[1] = new operatorArgPair(&SUB, "-");
 	pairs[2] = new operatorArgPair(&MUL, "x");
 	pairs[3] = new operatorArgPair(&DIV, "/");
-	pairs[4] = new operatorArgPair(&POW, "^");
+	pairs[4] = new operatorArgPair(&POW, "pow");
 	pairs[5] = new operatorArgPair(&SQRT, "root");
 	pairs[6] = new operatorArgPair(&LOG, "log");
 	pairs[7] = new operatorArgPair(&L10, "log10");
@@ -34,6 +36,12 @@ void start() {
 	pairs[23] = new operatorArgPair(&NEG, "negate");
 	pairs[24] = new operatorArgPair(&PI, "pi");
 	pairs[25] = new operatorArgPair(&E, "e");
+	pairs[26] = new operatorArgPair(&HCF, "hcf");
+	pairs[27] = new operatorArgPair(&LCM, "lcm");
+	pairs[28] = new operatorArgPair(&RANDOM, "random");
+	pairs[29] = new operatorArgPair(&RANDOM_INT, "randomint");
+	pairs[30] = new operatorArgPair(&RANDOM_RANGE, "randomrange");
+	pairs[31] = new operatorArgPair(&RANDOM_INT_RANGE, "randomintrange");
 }
 
 void end() {
@@ -88,7 +96,7 @@ bool MUL(std::vector<double>* stack) {
 		*(stack->end()-2) *= stack->back();
 		stack->pop_back();
 	} else {
-		printError("* takes 2 argument");
+		printError("x takes 2 argument");
 		return false;
 	}
 	return true;
@@ -96,6 +104,10 @@ bool MUL(std::vector<double>* stack) {
 
 bool DIV(std::vector<double>* stack) {
 	if (checkEnoughArgs(stack, 2)) {
+		if (stack->back() == 0) {
+			printError("division by 0 exception.");
+			return false;
+		}
 		*(stack->end()-2) /= stack->back();
 		stack->pop_back();
 	} else {
@@ -110,7 +122,7 @@ bool POW(std::vector<double>* stack) {
 		*(stack->end()-2) = pow(*(stack->end()-2), stack->back());
 		stack->pop_back();
 	} else {
-		printError("^ takes 2 argument");
+		printError("pow takes 2 argument");
 		return false;
 	}
 	return true;
@@ -118,6 +130,10 @@ bool POW(std::vector<double>* stack) {
 
 bool SQRT(std::vector<double>* stack) {
 	if (checkEnoughArgs(stack, 1)) {
+		if (stack->back() < 0) {
+			printError("negative root exception.");
+			return false;
+		}
 		stack->back() = sqrt(stack->back());
 	} else {
 		printError("root takes 1 argument");
@@ -128,6 +144,10 @@ bool SQRT(std::vector<double>* stack) {
 
 bool LOG(std::vector<double>* stack) {
 	if (checkEnoughArgs(stack, 1)) {
+		if (stack->back() < 0) {
+			printError("negative logarithm exception.");
+			return false;
+		}
 		stack->back() = log(stack->back());
 	} else {
 		printError("log takes 1 argument");
@@ -138,6 +158,10 @@ bool LOG(std::vector<double>* stack) {
 
 bool L10(std::vector<double>* stack) {
 	if (checkEnoughArgs(stack, 1)) {
+		if (stack->back() < 0) {
+			printError("negative logarithm exception.");
+			return false;
+		}
 		stack->back() = log10(stack->back());
 	} else {
 		printError("log10 takes 1 argument");
@@ -148,6 +172,10 @@ bool L10(std::vector<double>* stack) {
 
 bool L2(std::vector<double>* stack) {
 	if (checkEnoughArgs(stack, 1)) {
+		if (stack->back() < 0) {
+			printError("negative logarithm exception.");
+			return false;
+		}
 		stack->back() = log2(stack->back());
 	} else {
 		printError("log2 takes 1 argument");
@@ -199,6 +227,10 @@ bool TAN(std::vector<double>* stack) {
 
 bool ASIN(std::vector<double>* stack) {
 	if (checkEnoughArgs(stack, 1)) {
+		if (stack->back() < -1 || stack->back() > 1) {
+			printError("asin of number greater than +-1 exception.");
+			return false;
+		}
 		stack->back() = asin(stack->back());
 	} else {
 		printError("asin takes 1 argument");
@@ -209,6 +241,10 @@ bool ASIN(std::vector<double>* stack) {
 
 bool ACOS(std::vector<double>* stack) {
 	if (checkEnoughArgs(stack, 1)) {
+		if (stack->back() < -1 || stack->back() > 1) {
+			printError("acos of number greater than +-1 exception.");
+			return false;
+		}
 		stack->back() = acos(stack->back());
 	} else {
 		printError("acos takes 1 argument");
@@ -314,6 +350,76 @@ bool PI(std::vector<double>* stack) {
 
 bool E(std::vector<double>* stack) {
 	stack->push_back(2.718281);
+	return true;
+}
+
+bool RANDOM(std::vector<double>* stack) {
+	stack->push_back(rand() / (double)RAND_MAX);
+	return true;
+}
+
+bool RANDOM_RANGE(std::vector<double>* stack) {
+	if (checkEnoughArgs(stack, 2)) {
+		*(stack->end() -2) = *(stack->end() -2) + ((rand() / (double)RAND_MAX) * stack->back());
+		stack->pop_back();
+		return true;
+	} else {
+		printError("randomrange takes 2 argument");
+		return false;	
+	}
+}
+
+bool RANDOM_INT(std::vector<double>* stack) {
+	stack->push_back(ceil(rand()));
+	return true;
+}
+
+bool RANDOM_INT_RANGE(std::vector<double>* stack) {
+	if (checkEnoughArgs(stack, 2)) {
+		*(stack->end() -2) = ceil(*(stack->end() -2) + (rand() % (int)stack->back()));
+		stack->pop_back();
+		return true;
+	} else {
+		printError("randomintrange takes 2 argument");
+		return false;	
+	}
+}
+
+bool HCF(std::vector<double>* stack) {
+	if (checkEnoughArgs(stack, 2)) {
+		double prev = *(stack->end()-2);
+		double mod = stack->back();
+		double remain = fmod(prev, mod);
+		while (remain != 0) {
+			prev = mod;
+			mod = remain;
+			remain = fmod(prev, mod);
+		}
+		*(stack->end()-2) = mod;
+		stack->pop_back();
+	} else {
+		printError("hcf takes 2 argument");
+		return false;
+	}
+	return true;
+}
+
+bool LCM(std::vector<double>* stack) {
+	if (checkEnoughArgs(stack, 2)) {
+		double prev = *(stack->end()-2);
+		double mod = stack->back();
+		double remain = fmod(prev, mod);
+		while (remain != 0) {
+			prev = mod;
+			mod = remain;
+			remain = fmod(prev, mod);
+		}
+		*(stack->end()-2) = abs((*(stack->end()-2) * stack->back()) / mod);
+		stack->pop_back();
+	} else {
+		printError("lcm takes 2 argument");
+		return false;
+	}
 	return true;
 }
 

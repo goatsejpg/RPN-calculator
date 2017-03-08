@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <string.h>
+#include <random>
+#include <time.h>
 
 #include "operands.h"
 #include "error.h"
@@ -15,6 +17,7 @@ bool isNum(const char* str, double* ret) {
 }
 
 int main(int argc, char* argv[]) {
+	srand(time(NULL));
 	if (argc < 2) {
 		std::cerr << "ERROR: No arguments passed! -h for help" << std::endl;
 		return -1;
@@ -32,12 +35,51 @@ int main(int argc, char* argv[]) {
 			"> b negate b 2 ^ 4 a c x x - root PLUSMINUS 2 a x /\n"
 			"where PLUSMINUS can be + or -\n"
 			"COMMANDS -\n"
-			"-l : lists all operators" << std::endl;
+			"-l  : lists all operators.\n"
+			"-lh : extensive operator list and explanation." << std::endl;
 			return 0;
 		} else {
 			if (!strcmp(argv[1], "-l")) {
 				print();
 				return 0;
+			} else {
+				if (!strcmp(argv[1], "-lh")) {
+
+				std::cout <<
+				"OPERATOR LIST:\n"
+				"STANDARD OPERATORS -\n"
+				"(+) two inputs - sums two numbers.\n"
+				"(-) two inputs - subtracts two number.\n"
+				"(x) two inputs - multiplies two numbers.\n"
+				"(/) two inputs - divides two numbers.\n"
+				"(pow) two input - raises first input to magnitude of input two.\n"
+				"(root) one input - returns square root of its input.\n"
+				"(log) one input - returns natural logarithm of its input.\n"
+				"(log10) one input - returns log10 of its input.\n"
+				"(log2) one input - returns log2 of its input.\n"
+				"(%) two inputs - returns modulo of its two inputs (remainder from division).\n\n"
+				"TRIGONOMETRY FUNCTIONS -\n"
+				"(sin, cos, tan) one input - trigonometric functions of its input (radians).\n"
+				"(asin, acos, atan) one input - arc trigonometric functions of its input (radians).\n"
+				"(sinh, cosh, tanh) one input - hyperbole trigonometric functions of its input (radians).\n\n"
+				"CONSTANTS -\n"
+				"(pi) no input - returns the pi constant.\n"
+				"(e) no input - returns the Euler's number constant (e).\n\n"
+				"FUNCTIONS -\n"
+				"(ceil) one input - returns the ceiling of the input (rounds up).\n"
+				"(floor) one input - returns the floor of the input (rounds down).\n"
+				"(round) one input - returns the input rounded to the nearest integer.\n"
+				"(abs) one input - returns the absolute value of its input.\n"
+				"(negate) one input - negates the input.\n"
+				"(hcf) two input - returns the highest common factor of its two inputs.\n"
+				"(lcm) two input - retusnt the lowest common multiple of its two inputs.\n"
+				"(random, randomint) no input - returns a random real number or integer respectively.\n"
+				"(randomrange, randomintrange) two inputs - returns a random real number or integer respectively\n"
+				"                              within the range starting at the first input with a range of the second input.\n"
+				<< std::endl;
+					return 0;
+
+				}
 			}
 		}
 		double ret;
