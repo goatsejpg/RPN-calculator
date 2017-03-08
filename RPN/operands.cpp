@@ -344,12 +344,12 @@ bool NEG(std::vector<double>* stack) {
 }
 
 bool PI(std::vector<double>* stack) {
-	stack->push_back(3.141592);
+	stack->push_back(3.14159265359);
 	return true;
 }
 
 bool E(std::vector<double>* stack) {
-	stack->push_back(2.718281);
+	stack->push_back(2.71828182845);
 	return true;
 }
 

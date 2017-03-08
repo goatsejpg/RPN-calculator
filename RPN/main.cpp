@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <string.h>
 #include <random>
@@ -32,7 +33,7 @@ int main(int argc, char* argv[]) {
 			"and 4 x ( 1 - 3 ) + 3 is\n"
 			"> 4 1 3 - x 3 +\n"
 			"The quadratic formula is\n"
-			"> b negate b 2 ^ 4 a c x x - root PLUSMINUS 2 a x /\n"
+			"> b negate b 2 pow 4 a c x x - root PLUSMINUS 2 a x /\n"
 			"where PLUSMINUS can be + or -\n"
 			"COMMANDS -\n"
 			"-l  : lists all operators.\n"
@@ -82,6 +83,7 @@ int main(int argc, char* argv[]) {
 				}
 			}
 		}
+		std::cout << std::fixed << std::setprecision(6);
 		double ret;
 		for (std::size_t pos = 1; pos < argc; ++pos) {
 			if (isNum(argv[pos], &ret)) {
