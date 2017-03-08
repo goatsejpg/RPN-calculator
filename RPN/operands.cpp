@@ -5,7 +5,7 @@
 #include "operands.h"
 #include "error.h"
 
-operatorArgPair* pairs[24];
+operatorArgPair* pairs[26];
 
 void start() {
 	pairs[0] = new operatorArgPair(&ADD, "+");
@@ -32,6 +32,8 @@ void start() {
 	pairs[21] = new operatorArgPair(&RND, "round");
 	pairs[22] = new operatorArgPair(&ABS, "abs");
 	pairs[23] = new operatorArgPair(&NEG, "negate");
+	pairs[24] = new operatorArgPair(&PI, "pi");
+	pairs[25] = new operatorArgPair(&E, "e");
 }
 
 void end() {
@@ -305,18 +307,25 @@ bool NEG(std::vector<double>* stack) {
 	return true;
 }
 
+bool PI(std::vector<double>* stack) {
+	stack->push_back(3.141592);
+	return true;
+}
 
-bool operate(std::vector<double>* stack, const char* operatorArg) {
+bool E(std::vector<double>* stack) {
+	stack->push_back(2.718281);
+	return true;
+}
+
+bool operate(std::vector<double>* stack, const char* operatorArg, const std::size_t pos) {
 	operatorArgPair* lulz = nullptr;
-	unsigned short count;
 	for (auto i = std::begin(pairs); i != std::end(pairs); ++i) {
 		if (!strcmp((*i)->argString.c_str(), operatorArg)) {
 			lulz = *i;
 		}
-		++count;
 	}
 	if (lulz == nullptr) {
-		std::cerr << "ERROR: operator " << operatorArg << " not recognised." << std::endl; 
+		std::cerr << "ERROR: operator " << operatorArg << " not recognised at " << pos << std::endl; 
 		return false;
 	} else {
 		return (*(lulz->func))(stack);

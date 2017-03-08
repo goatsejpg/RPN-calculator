@@ -13,14 +13,14 @@ struct operatorArgPair {
 	~operatorArgPair() = default;
 };
 
-extern operatorArgPair* operatorArgPairs[24];
+extern operatorArgPair* operatorArgPairs[26];
 
 void start();
 void end();
 void print();
 
 bool checkEnoughArgs(std::vector<double>* stack, const uint8_t& quantity);
-bool operate(std::vector<double>* stack, const char* operatorArg);
+bool operate(std::vector<double>* stack, const char* operatorArg, const std::size_t pos);
 
 bool ADD(std::vector<double>* stack);
 bool SUB(std::vector<double>* stack);
@@ -50,5 +50,7 @@ bool RND(std::vector<double>* stack);
 bool ABS(std::vector<double>* stack);
 bool NEG(std::vector<double>* stack);
 
+bool PI(std::vector<double>* stack);
+bool E(std::vector<double>* stack);
 
 #endif // OPERANDS_H

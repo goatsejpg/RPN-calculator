@@ -21,14 +21,15 @@ int main(int argc, char* argv[]) {
 	} else {
 		start();
 		std::vector<double> stack;
+		stack.reserve(argc - 1);
 		if (!strcmp(argv[1], "-h")) {
 			std::cout << "Reverse Polish Notation Calculator (RPN)\n"
 			"Put operators after the terms, for example adding 2 and 5 together is\n"
-			"\t2 5 +\n"
+			"> 2 5 +\n"
 			"and 4 x ( 1 - 3 ) + 3 is\n"
-			"\t4 1 3 - x 3 +\n"
+			"> 4 1 3 - x 3 +\n"
 			"The quadratic formula is\n"
-			"\tb negate b 2 ^ 4 a c x x - root PLUSMINUS 2 a * /\n"
+			"> b negate b 2 ^ 4 a c x x - root PLUSMINUS 2 a x /\n"
 			"where PLUSMINUS can be + or -\n"
 			"COMMANDS -\n"
 			"-l : lists all operators" << std::endl;
@@ -44,11 +45,17 @@ int main(int argc, char* argv[]) {
 			if (isNum(argv[pos], &ret)) {
 				stack.push_back(ret);
 			} else {
-				if (!operate(&stack, argv[pos])) return 1;
+				if (!operate(&stack, argv[pos], pos)) return 1;
 			}
 		}
 		if (stack.size() > 1) {
-			std::cerr << "ERROR: " << stack.size() - 1 << " extra numbers left in the stack, perhaps too few operators or too many numbers defined?" << std::endl;
+			std::cerr << "ERROR: " << stack.size() - 1 << " extra numbers left in the stack, perhaps too few operators or too many numbers defined?\nSTACK:" << std::endl;
+			short c = 0;
+			for (auto i = stack.begin(); i != stack.end(); ++i) {
+				std::cout << '[' << c << ']' << *i << " ";
+				std::cout << std::flush;
+				c++;
+			}
 		} else {
 			std::cout << stack.front() << std::endl;
 		}
