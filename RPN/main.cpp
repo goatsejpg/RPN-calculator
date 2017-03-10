@@ -73,7 +73,7 @@ int main(int argc, char* argv[]) {
 				"(abs) one input - returns the absolute value of its input.\n"
 				"(negate) one input - negates the input.\n"
 				"(hcf) two input - returns the highest common factor of its two inputs.\n"
-				"(lcm) two input - retusnt the lowest common multiple of its two inputs.\n"
+				"(lcm) two input - returns the lowest common multiple of its two inputs.\n"
 				"(random, randomint) no input - returns a random real number or integer respectively.\n"
 				"(randomrange, randomintrange) two inputs - returns a random real number or integer respectively\n"
 				"                              within the range starting at the first input with a range of the second input.\n"
